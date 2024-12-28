@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/dotoree/test-transliterations/storage"
 	"github.com/dotoree/test-transliterations/utils"
 	"gorm.io/gorm"
@@ -14,6 +16,23 @@ func main() {
 		DB:     &gorm.DB{},
 	}
 
+	// Imports (Disabled)
+	if false {
+		doImports()
+	}
+
+	// Test results
+	repo.OpenDatabase()
+	word, err := repo.FindRandomWord(6)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("%#v\n", word)
+}
+
+func doImports() {
 	// Purge existing database
 	repo.PurgeDatabase()
 
@@ -21,5 +40,5 @@ func main() {
 	utils.ImportDictionary(&utils.Dictionary{
 		Lang:     "el",
 		Filename: "Greek_utf8.dic",
-	}, repo, 1000)
+	}, repo, 0)
 }
