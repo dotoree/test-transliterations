@@ -46,13 +46,13 @@ func (r *Repository) CreateWord(word *Word) error {
 	return result.Error
 }
 
-func (r *Repository) FindRandomWord(chars int) (*Word, error) {
-	foundWord := &Word{}
-	result := r.DB.Order("RANDOM()").First(foundWord, "chars = ?", chars)
+func (r *Repository) FindRandomWords(chars int, limit int) (*[]Word, error) {
+	words := &[]Word{}
+	result := r.DB.Limit(limit).Order("RANDOM()").Find(words, "chars = ?", chars)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	return foundWord, nil
+	return words, nil
 }

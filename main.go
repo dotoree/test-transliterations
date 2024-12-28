@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dotoree/test-transliterations/storage"
 	"github.com/dotoree/test-transliterations/utils"
@@ -23,13 +24,20 @@ func main() {
 
 	// Test results
 	repo.OpenDatabase()
-	word, err := repo.FindRandomWord(6)
+	words, err := repo.FindRandomWords(6, 4)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("%#v\n", word)
+	fmt.Println("")
+	p := []string{}
+	for _, word := range *words {
+		fmt.Printf("%#v\n", word)
+		p = append(p, word.LatinWord)
+	}
+	fmt.Println("\n" + strings.Join(p[:], "-"))
+	fmt.Println("")
 }
 
 func doImports() {
