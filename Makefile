@@ -3,3 +3,6 @@ build:
 
 run:
 	@go run main.go
+
+lines:
+	@cloc ./**/*.go *.go
