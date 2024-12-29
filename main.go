@@ -13,18 +13,19 @@ var repo *storage.Repository
 
 func main() {
 	repo = &storage.Repository{
-		DBName: "el.db",
+		DBName: "bybonpass.db",
 		DB:     &gorm.DB{},
 	}
 
 	// Imports (Disabled)
 	if false {
-		doImports()
+		importGreek()
 	}
 
 	// Test results
 	repo.OpenDatabase()
-	words, err := repo.FindRandomWords(6, 4)
+	lang := "el"
+	words, err := repo.FindRandomWords(lang, 6, 4)
 
 	if err != nil {
 		panic(err)
@@ -40,10 +41,7 @@ func main() {
 	fmt.Println("")
 }
 
-func doImports() {
-	// Purge existing database
-	repo.PurgeDatabase()
-
+func importGreek() {
 	// Import Greek dictionary
 	utils.ImportDictionary(&utils.Dictionary{
 		Lang:     "el",

@@ -34,9 +34,9 @@ func (r *Repository) PurgeDatabase() {
 	os.Remove(r.DBName)
 }
 
-func (r *Repository) LatinWordExists(latinWord string) bool {
+func (r *Repository) LatinWordExists(lang string, latinWord string) bool {
 	foundWord := &Word{}
-	r.DB.First(foundWord, "latin_word = ?", latinWord)
+	r.DB.First(foundWord, "latin_word = ? AND lang = ?", latinWord, lang)
 
 	return foundWord.ID > 0
 }
@@ -46,9 +46,10 @@ func (r *Repository) CreateWord(word *Word) error {
 	return result.Error
 }
 
-func (r *Repository) FindRandomWords(chars int, limit int) (*[]Word, error) {
+func (r *Repository) FindRandomWords(lang string, chars int, limit int) (*[]Word, error) {
 	words := &[]Word{}
-	result := r.DB.Limit(limit).Order("RANDOM()").Find(words, "chars = ?", chars)
+	result := r.DB.Limit(limit).Order("RANDOM()").
+		Find(words, "lang = ? AND chars = ?", lang, chars)
 
 	if result.Error != nil {
 		return nil, result.Error

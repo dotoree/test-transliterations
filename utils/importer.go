@@ -60,11 +60,11 @@ func ImportDictionary(d *Dictionary, r *storage.Repository, maxEntries int) {
 		chars := len(latinWord)
 		if chars >= 4 && chars <= 8 {
 			// Skip duplicate words
-			if r.LatinWordExists(latinWord) {
+			if r.LatinWordExists(d.Lang, latinWord) {
 				continue
 			}
 
-			word := storage.Word{OriginalWord: greekWord, LatinWord: latinWord, Chars: byte(chars)}
+			word := storage.Word{Lang: d.Lang, OriginalWord: greekWord, LatinWord: latinWord, Chars: byte(chars)}
 			if err = r.CreateWord(&word); err != nil {
 				log.Println("Error inserting word:", latinWord, err)
 			}
