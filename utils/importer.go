@@ -18,11 +18,20 @@ import (
 
 type Dictionary struct {
 	Lang     string
+	Code     string
+	Name     string
 	Filename string
 }
 
 func ImportDictionary(d *Dictionary, r *storage.Repository, maxEntries int) {
 	r.PrepareDatabase()
+
+	collection := &storage.Collection{Lang: d.Lang, Code: d.Code, Name: d.Name}
+	if err := r.FindCollectionByCode(collection, d.Code); err != nil {
+		if err := r.CreateCollection(collection); err != nil {
+			panic(err)
+		}
+	}
 
 	// Open Greek dictionary file
 	file, err := os.Open(d.Filename)
@@ -60,11 +69,11 @@ func ImportDictionary(d *Dictionary, r *storage.Repository, maxEntries int) {
 		chars := len(latinWord)
 		if chars >= 4 && chars <= 8 {
 			// Skip duplicate words
-			if r.LatinWordExists(d.Lang, latinWord) {
+			if r.LatinWordExists(collection, latinWord) {
 				continue
 			}
 
-			word := storage.Word{Lang: d.Lang, OriginalWord: greekWord, LatinWord: latinWord, Chars: byte(chars)}
+			word := storage.Word{CollectionID: collection.ID, OriginalWord: greekWord, LatinWord: latinWord, Chars: byte(chars)}
 			if err = r.CreateWord(&word); err != nil {
 				log.Println("Error inserting word:", latinWord, err)
 			}

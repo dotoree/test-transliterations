@@ -19,12 +19,22 @@ var repo *storage.Repository
 
 var dictionaries = []utils.Dictionary{
 	{
+		Code:     "el_all",
 		Lang:     "el",
+		Name:     "Greek (All words)",
 		Filename: "Greek_utf8.dic",
 	},
 	{
+		Code:     "en_all",
 		Lang:     "en",
+		Name:     "English (All words)",
 		Filename: "English.dic",
+	},
+	{
+		Code:     "en_common",
+		Name:     "English (Common words)",
+		Lang:     "en",
+		Filename: "English_Common.dic",
 	},
 }
 
@@ -35,14 +45,24 @@ func main() {
 	}
 
 	// Imports
-	// importLangDictionary("el")
-	// importLangDictionary("en")
+	// English (Common words)
+	// importLangDictionary("en_common")
+	// Greek (All words)
+	// importLangDictionary("el_all")
+	// English (All words)
+	// importLangDictionary("en_all")
+	// Dummy
 	importLangDictionary("xxx")
 
 	// Test results
 	repo.OpenDatabase()
-	lang := "en"
-	words, err := repo.FindRandomWords(lang, 6, 4)
+
+	code := "en_common"
+	collection := &storage.Collection{}
+	if err := repo.FindCollectionByCode(collection, code); err != nil {
+		panic(err)
+	}
+	words, err := repo.FindRandomWords(collection, 6, 4)
 
 	if err != nil {
 		panic(err)
@@ -72,8 +92,8 @@ func main() {
 	fmt.Printf("Entropy: %v\n\n", entropy)
 }
 
-func importLangDictionary(lang string) {
-	idx := slices.IndexFunc(dictionaries, func(d utils.Dictionary) bool { return d.Lang == lang })
+func importLangDictionary(code string) {
+	idx := slices.IndexFunc(dictionaries, func(d utils.Dictionary) bool { return d.Code == code })
 
 	if idx > -1 {
 		utils.ImportDictionary(&dictionaries[idx], repo, 0)
