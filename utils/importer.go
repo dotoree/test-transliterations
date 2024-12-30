@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strconv"
 	"unicode"
 
@@ -22,6 +23,8 @@ type Dictionary struct {
 	Name     string
 	Filename string
 }
+
+var IsLowerLetter = regexp.MustCompile(`^[a-z]+$`).MatchString
 
 func ImportDictionary(d *Dictionary, r *storage.Repository, maxEntries int) {
 	r.PrepareDatabase()
@@ -63,6 +66,11 @@ func ImportDictionary(d *Dictionary, r *storage.Repository, maxEntries int) {
 
 		// Skip non ASCII words
 		if !isASCII(latinWord) {
+			continue
+		}
+
+		// Skip non words
+		if !IsLowerLetter(latinWord) {
 			continue
 		}
 

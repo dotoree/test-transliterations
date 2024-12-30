@@ -36,6 +36,18 @@ var dictionaries = []utils.Dictionary{
 		Lang:     "en",
 		Filename: "English_Common.dic",
 	},
+	{
+		Code:     "es_common",
+		Name:     "Spanish (Common words)",
+		Lang:     "es",
+		Filename: "Spanish_Common.dic",
+	},
+	{
+		Code:     "fr_common",
+		Name:     "French (Common words)",
+		Lang:     "fr",
+		Filename: "French_Common.dic",
+	},
 }
 
 func main() {
@@ -44,17 +56,31 @@ func main() {
 		DB:     &gorm.DB{},
 	}
 
+	// ------------------------------------------------------------------------
 	// Imports
+	// ------------------------------------------------------------------------
+
 	// English (Common words)
 	// importLangDictionary("en_common")
+
 	// Greek (All words)
 	// importLangDictionary("el_all")
+
 	// English (All words)
 	// importLangDictionary("en_all")
+
+	// Spanish (Common words)
+	// importLangDictionary("es_common")
+
+	// French (Common words)
+	// importLangDictionary("fr_common")
+
 	// Dummy
 	importLangDictionary("xxx")
 
+	// ------------------------------------------------------------------------
 	// Test results
+	// ------------------------------------------------------------------------
 	repo.OpenDatabase()
 
 	code := "en_common"
