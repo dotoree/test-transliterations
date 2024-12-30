@@ -5,11 +5,14 @@
     "cSpell.ignoreWords": [
         "Unidecode",
         "bybonpass",
+        "caser",
         "dotoree",
         "mozillazg",
+        "passwordvalidator",
         "stts",
         "translit",
-        "unidecode"
+        "unidecode",
+        "wagslane"
     ],
     "makefile.configureOnOpen": false
 }

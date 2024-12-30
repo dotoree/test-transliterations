@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand/v2"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -16,20 +17,31 @@ import (
 
 var repo *storage.Repository
 
+var dictionaries = []utils.Dictionary{
+	{
+		Lang:     "el",
+		Filename: "Greek_utf8.dic",
+	},
+	{
+		Lang:     "en",
+		Filename: "English.dic",
+	},
+}
+
 func main() {
 	repo = &storage.Repository{
 		DBName: "bybonpass.db",
 		DB:     &gorm.DB{},
 	}
 
-	// Imports (Disabled)
-	if false {
-		importGreek()
-	}
+	// Imports
+	// importLangDictionary("el")
+	// importLangDictionary("en")
+	importLangDictionary("xxx")
 
 	// Test results
 	repo.OpenDatabase()
-	lang := "el"
+	lang := "en"
 	words, err := repo.FindRandomWords(lang, 6, 4)
 
 	if err != nil {
@@ -60,10 +72,10 @@ func main() {
 	fmt.Printf("Entropy: %v\n\n", entropy)
 }
 
-func importGreek() {
-	// Import Greek dictionary
-	utils.ImportDictionary(&utils.Dictionary{
-		Lang:     "el",
-		Filename: "Greek_utf8.dic",
-	}, repo, 0)
+func importLangDictionary(lang string) {
+	idx := slices.IndexFunc(dictionaries, func(d utils.Dictionary) bool { return d.Lang == lang })
+
+	if idx > -1 {
+		utils.ImportDictionary(&dictionaries[idx], repo, 0)
+	}
 }
